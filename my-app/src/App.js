@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { useReducer } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function reducer(state, action) {
+  switch (action.type) {
+    case "incremented_age": {
+      return {
+        name: state.name,
+        age: state.age + 1,
+      };
+    }
+    case "changed_name": {
+      return {
+        name: action.nextName,
+        age: state.age,
+      };
+    }
+  }
+  throw Error("Unknown action: " + action.type);
 }
 
-export default App;
+const initialState = { name: "Taylor", age: 42 };
+
+export default function Form() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  function handleButtonClick() {
+    dispatch({ type: "incremented_age" });
+  }
+
+  function handleInputChange(e) {
+    dispatch({
+      type: "changed_name",
+      nextName: e.target.value,
+    });
+  }
+
+  return (
+    <>
+      <input value={state.name} onChange={handleInputChange} />
+      <button onClick={handleButtonClick}>Increment age</button>
+      <p>
+        Hello, {state.name}. You are {state.age}.
+      </p>
+    </>
+  );
+}
