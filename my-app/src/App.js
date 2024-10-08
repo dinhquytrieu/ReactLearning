@@ -1,46 +1,28 @@
-import { useReducer } from "react";
+import React, { useState } from "react";
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "incremented_age": {
-      return {
-        name: state.name,
-        age: state.age + 1,
-      };
-    }
-    case "changed_name": {
-      return {
-        name: action.nextName,
-        age: state.age,
-      };
-    }
-  }
-  throw Error("Unknown action: " + action.type);
-}
+function App() {
+  // Khai báo state "name" để lưu trữ giá trị của input
+  const [name, setName] = useState("");
 
-const initialState = { name: "Taylor", age: 42 };
-
-export default function Form() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  function handleButtonClick() {
-    dispatch({ type: "incremented_age" });
-  }
-
-  function handleInputChange(e) {
-    dispatch({
-      type: "changed_name",
-      nextName: e.target.value,
-    });
-  }
+  // Hàm xử lý sự kiện khi người dùng thay đổi giá trị trong input
+  const handleInputChange = (event) => {
+    setName(event.target.value); // Cập nhật giá trị state "name" theo giá trị của input
+  };
 
   return (
-    <>
-      <input value={state.name} onChange={handleInputChange} />
-      <button onClick={handleButtonClick}>Increment age</button>
-      <p>
-        Hello, {state.name}. You are {state.age}.
-      </p>
-    </>
+    <div>
+      {/* Input có thuộc tính value liên kết với state "name" và cập nhật qua sự kiện onChange */}
+      <input
+        type="text"
+        value={name}
+        onChange={handleInputChange}
+        placeholder="Enter your name"
+      />
+
+      {/* Hiển thị giá trị của state "name" */}
+      <p>Hello, {name}!</p>
+    </div>
   );
 }
+
+export default App;
